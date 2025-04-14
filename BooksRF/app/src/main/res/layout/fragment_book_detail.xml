@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background_light"
+    tools:context=".ui.fragments.BookDetailFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="50dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textColor="@color/text_primary"
+                android:textStyle="bold"
+                android:gravity="center" />
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/ivImage"
+                android:layout_width="200dp"
+                android:layout_height="300dp"
+                android:layout_marginTop="16dp"
+                app:riv_corner_radius="12dp"
+                tools:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:id="@+id/tvAuthors"
+                android:layout_marginTop="30dp"
+                style="@style/BookDetailInfo"/>
+
+            <TextView
+                android:id="@+id/tvPages"
+                style="@style/BookDetailInfo"/>
+
+            <TextView
+                android:id="@+id/tvPublisher"
+                style="@style/BookDetailInfo"/>
+
+            <TextView
+                android:id="@+id/tvYear"
+                style="@style/BookDetailInfo"/>
+
+            <TextView
+                android:id="@+id/tvGenre"
+                style="@style/BookDetailInfo"/>
+
+            <TextView
+                android:id="@+id/tvLongDesc"
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_tertiary"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:indeterminateDrawable="@drawable/loading_anim" />
+</FrameLayout>

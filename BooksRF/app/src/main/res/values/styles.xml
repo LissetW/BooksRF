@@ -1,0 +1,9 @@
+<resources>
+    <style name="BookDetailInfo">
+       <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingTop">8dp</item>
+    </style>
+</resources>
