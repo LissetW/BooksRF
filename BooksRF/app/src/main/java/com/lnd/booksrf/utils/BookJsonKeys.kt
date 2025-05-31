@@ -9,6 +9,7 @@ object BookJsonKeys {
     const val YEAR = "year"
     const val GENRE = "genre"
     const val SUMMARY = "summary"
+    const val VIDEO = "video"
     const val ID = "id"
     const val THUMBNAIL = "thumbnail"
 }

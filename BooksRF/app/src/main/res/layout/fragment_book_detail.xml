@@ -62,6 +62,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_tertiary"/>
+
+            <TextView
+                android:id="@+id/btnWatchReview"
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/watch_review"
+                android:gravity="center"
+                android:textColor="@android:color/holo_blue_dark"/>
         </LinearLayout>
     </ScrollView>
 

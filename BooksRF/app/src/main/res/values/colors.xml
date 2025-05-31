@@ -8,4 +8,5 @@
     <color name="secondary">#4F6D7A</color>
     <color name="button">#C97E4E</color>
     <color name="item_background">#FFF8F1</color>
+    <color name="video_background">#000000</color>
 </resources>

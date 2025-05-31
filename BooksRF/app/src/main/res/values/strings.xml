@@ -1,6 +1,10 @@
 <resources>
-    <string name="app_name">Books RF</string>
+    <string name="app_name">Books</string>
     <string name="pages">Pages \: %1$d</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="connection_error">Connection error!</string>
+    <string name="watch_review">Watch review</string>
+    <string name="invalid_video">Not a valid video!</string>
+    <string name="detail_load_error">Detail load error: %1$s</string>
+    <string name="no_video_found">No video found</string>
 </resources>

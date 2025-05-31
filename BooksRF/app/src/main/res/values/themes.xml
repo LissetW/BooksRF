@@ -6,4 +6,11 @@
     </style>
 
     <style name="Theme.BooksRF" parent="Base.Theme.BooksRF" />
+
+    <style name="Theme.BooksRF.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="windowSplashScreenBackground">@color/ic_launcher_background</item>
+        <item name="postSplashScreenTheme">@style/Theme.BooksRF</item>
+    </style>
+
 </resources>

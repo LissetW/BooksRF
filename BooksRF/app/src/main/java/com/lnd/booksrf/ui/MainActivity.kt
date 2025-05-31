@@ -8,7 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.lnd.booksrf.R
 import com.lnd.booksrf.databinding.ActivityMainBinding
-import com.lnd.booksrf.ui.fragments.BooksListFragment
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.lnd.booksrf.utils.NetworkMonitor
 
 class MainActivity : AppCompatActivity() {
@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         binding = ActivityMainBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
@@ -25,15 +26,6 @@ class MainActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-        }
-
-        // Primera ejecución de la activity
-        if(savedInstanceState == null){
-            supportFragmentManager.beginTransaction()
-                .replace(
-                    R.id.fragment_container,
-                    BooksListFragment()
-                ).commit()
         }
     }
 

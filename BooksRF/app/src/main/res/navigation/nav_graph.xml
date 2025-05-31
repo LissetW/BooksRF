@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/booksListFragment">
+
+    <fragment
+        android:id="@+id/booksListFragment"
+        android:name="com.lnd.booksrf.ui.fragments.BooksListFragment"
+        android:label="fragment_books_list"
+        tools:layout="@layout/fragment_books_list" >
+        <action
+            android:id="@+id/action_booksListFragment_to_bookDetailFragment"
+            app:destination="@id/bookDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookDetailFragment"
+        android:name="com.lnd.booksrf.ui.fragments.BookDetailFragment"
+        android:label="fragment_book_detail"
+        tools:layout="@layout/fragment_book_detail" >
+        <action
+            android:id="@+id/action_bookDetailFragment_to_videoFragment"
+            app:destination="@id/videoFragment" />
+        <action
+            android:id="@+id/action_bookDetailFragment_to_booksListFragment"
+            app:destination="@id/booksListFragment" />
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/videoFragment"
+        android:name="com.lnd.booksrf.ui.fragments.VideoFragment"
+        android:label="fragment_video"
+        tools:layout="@layout/fragment_video" >
+        <action
+            android:id="@+id/action_videoFragment_to_bookDetailFragment"
+            app:destination="@id/bookDetailFragment" />
+        <argument
+            android:name="videoUrl"
+            app:argType="string" />
+    </fragment>
+</navigation>

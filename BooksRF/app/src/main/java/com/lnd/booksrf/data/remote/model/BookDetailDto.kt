@@ -20,4 +20,6 @@ data class BookDetailDto (
     var genre: String? = null,
     @SerializedName(BookJsonKeys.SUMMARY)
     var summary: String? = null,
+    @SerializedName(BookJsonKeys.VIDEO)
+    var video: String? = null
 )

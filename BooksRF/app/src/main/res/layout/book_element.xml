@@ -46,8 +46,7 @@
         app:layout_constraintEnd_toEndOf="@+id/viewBackground"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/guideline8"
-        app:layout_constraintTop_toTopOf="@+id/viewBackground"
-        tools:text="Title" />
+        app:layout_constraintTop_toTopOf="@+id/viewBackground"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline8"

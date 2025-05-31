@@ -1,13 +1,14 @@
 package com.lnd.booksrf.ui.fragments
 
+import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lnd.booksrf.R
 import com.lnd.booksrf.application.BooksRFApp
@@ -15,7 +16,6 @@ import com.lnd.booksrf.data.BookRepository
 import com.lnd.booksrf.databinding.FragmentBooksListBinding
 import com.lnd.booksrf.ui.NetworkAware
 import com.lnd.booksrf.ui.adapters.BooksAdapter
-import com.lnd.booksrf.utils.Constants
 import kotlinx.coroutines.launch
 
 
@@ -26,6 +26,8 @@ class BooksListFragment : Fragment(), NetworkAware {
 
     private lateinit var repository: BookRepository
     private var shouldRetry = false
+
+    private var mediaPlayer: MediaPlayer? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,30 +47,26 @@ class BooksListFragment : Fragment(), NetworkAware {
         fetchBooks()
     }
 
-    private fun fetchBooks(){
+    private fun fetchBooks() {
         lifecycleScope.launch {
             try {
                 val books = repository.getBooks()
 
                 binding.rvBooks.apply {
                     layoutManager = LinearLayoutManager(requireContext())
-                    adapter = BooksAdapter(books){ selectedBook ->
-                        // Click de cada libro
-                        // Pasar al siguiente fragment con el id del libro seleccionado
-                        selectedBook.id?.let{ id ->
-                            requireActivity().supportFragmentManager.beginTransaction()
-                                .replace(
-                                    R.id.fragment_container,
-                                    BookDetailFragment.newInstance(id)
-                                )
-                                .addToBackStack(null)
-                                .commit()
+                    adapter = BooksAdapter(books) { selectedBook ->
+                        // Reproducir sonido al seleccionar
+                        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.page_sound)
+                        mediaPlayer?.start()
+                        selectedBook.id?.let { id ->
+                            val action = BooksListFragmentDirections
+                                .actionBooksListFragmentToBookDetailFragment(id)
+                            findNavController().navigate(action)
                         }
                     }
                 }
                 shouldRetry = false
             } catch (e: Exception) {
-                // Manejar la excepción
                 e.printStackTrace()
                 shouldRetry = true
                 Toast.makeText(
@@ -81,14 +79,27 @@ class BooksListFragment : Fragment(), NetworkAware {
             }
         }
     }
+
     override fun onNetworkAvailable() {
         if (shouldRetry) {
             fetchBooks()
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        mediaPlayer?.pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mediaPlayer?.start()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        mediaPlayer?.release()
+        mediaPlayer = null
     }
 }
