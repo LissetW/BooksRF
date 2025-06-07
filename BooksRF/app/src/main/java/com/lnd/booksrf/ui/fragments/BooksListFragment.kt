@@ -4,12 +4,18 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuHost
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.lnd.booksrf.R
 import com.lnd.booksrf.application.BooksRFApp
 import com.lnd.booksrf.data.BookRepository
@@ -17,7 +23,11 @@ import com.lnd.booksrf.databinding.FragmentBooksListBinding
 import com.lnd.booksrf.ui.NetworkAware
 import com.lnd.booksrf.ui.adapters.BooksAdapter
 import kotlinx.coroutines.launch
-
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavOptions
+import com.lnd.booksrf.utils.NetworkMonitor
+import com.lnd.booksrf.utils.message
 
 class BooksListFragment : Fragment(), NetworkAware {
 
@@ -28,6 +38,8 @@ class BooksListFragment : Fragment(), NetworkAware {
     private var shouldRetry = false
 
     private var mediaPlayer: MediaPlayer? = null
+
+    private lateinit var networkMonitor: NetworkMonitor
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,9 +54,46 @@ class BooksListFragment : Fragment(), NetworkAware {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        networkMonitor = NetworkMonitor(requireContext()) {
+            if (shouldRetry) {
+                fetchBooks()
+            }
+        }
+
+        // Toolbar como ActionBar
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayShowTitleEnabled(false)
+        setHasOptionsMenu(true)
         // Instanciar el repositorio desde la clase BooksRFApp
         repository = (requireActivity().application as BooksRFApp).repository
         fetchBooks()
+
+        val menuHost: MenuHost = requireActivity()
+
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.action_logout -> {
+                        FirebaseAuth.getInstance().signOut()
+                        requireActivity().message(getString(R.string.success_logout))
+                        findNavController().navigate(
+                            R.id.loginFragment,
+                            null,
+                            NavOptions.Builder()
+                                .setPopUpTo(R.id.booksListFragment, true)
+                                .build()
+                        )
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
     }
 
     private fun fetchBooks() {
@@ -78,6 +127,16 @@ class BooksListFragment : Fragment(), NetworkAware {
                 binding.pbLoading.visibility = View.GONE
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        networkMonitor.register()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        networkMonitor.unregister()
     }
 
     override fun onNetworkAvailable() {

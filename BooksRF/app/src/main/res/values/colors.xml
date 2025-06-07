@@ -9,4 +9,5 @@
     <color name="button">#C97E4E</color>
     <color name="item_background">#FFF8F1</color>
     <color name="video_background">#000000</color>
+    <color name="white">#FFFFFF</color>
 </resources>

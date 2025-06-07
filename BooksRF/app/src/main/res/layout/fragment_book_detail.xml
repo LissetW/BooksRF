@@ -71,6 +71,25 @@
                 android:text="@string/watch_review"
                 android:gravity="center"
                 android:textColor="@android:color/holo_blue_dark"/>
+
+            <TextView
+                android:id="@+id/tvAuthorCityText"
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/author_city"
+                android:gravity="center"
+                style="@style/BookDetailInfo"/>
+
+            <TextView
+                android:id="@+id/btnAuthorCity"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/author_city_btn"
+                android:gravity="center"
+                android:textColor="@android:color/holo_blue_dark"/>
+
         </LinearLayout>
     </ScrollView>
 

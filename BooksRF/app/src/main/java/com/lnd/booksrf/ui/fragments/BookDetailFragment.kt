@@ -22,9 +22,12 @@ import com.lnd.booksrf.ui.NetworkAware
 import com.lnd.booksrf.utils.Constants
 import kotlinx.coroutines.launch
 import androidx.navigation.fragment.navArgs
+import com.lnd.booksrf.data.remote.model.BookDetailDto
+import com.lnd.booksrf.utils.NetworkMonitor
 
 class BookDetailFragment : Fragment(), NetworkAware {
 
+    private lateinit var networkMonitor: NetworkMonitor
     private var _binding: FragmentBookDetailBinding? = null
     private val binding get() = _binding!!
 
@@ -36,6 +39,8 @@ class BookDetailFragment : Fragment(), NetworkAware {
 
     private var mediaPlayer: MediaPlayer? = null
 
+    private var bookDetail: BookDetailDto? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,6 +51,12 @@ class BookDetailFragment : Fragment(), NetworkAware {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        networkMonitor = NetworkMonitor(requireContext()) {
+            if (shouldRetry) {
+                fetchBook()
+            }
+        }
 
         repository = (requireActivity().application as BooksRFApp).repository
 
@@ -62,6 +73,22 @@ class BookDetailFragment : Fragment(), NetworkAware {
                     getString(R.string.no_video_found), Toast.LENGTH_SHORT).show()
             }
         }
+
+        binding.btnAuthorCity.setOnClickListener {
+            val location = bookDetail?.location
+            if (location != null) {
+                val mapsFragment = MapsFragment.newInstance(
+                    location.name ?: requireActivity().getString(R.string.unknown_location),
+                    location.latitude,
+                    location.longitude
+                )
+                mapsFragment.show(parentFragmentManager, "MapsDialog")
+            } else {
+                Toast.makeText(requireContext(), R.string.location_not_available, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.piano)
         mediaPlayer?.isLooping = true
         mediaPlayer?.start()
@@ -73,17 +100,17 @@ class BookDetailFragment : Fragment(), NetworkAware {
 
         lifecycleScope.launch {
             try {
-                val bookDetail = repository.getBooksDetail(bookId)
-                videoUrl = bookDetail.video ?: ""
+                bookDetail = repository.getBooksDetail(bookId)
+                videoUrl = bookDetail?.video ?: ""
                 binding.apply {
-                    tvTitle.text = bookDetail.title
-                    Glide.with(requireActivity()).load(bookDetail.image).into(ivImage)
-                    tvAuthors.text = bookDetail.authors
-                    tvPages.text = context?.getString(R.string.pages, bookDetail.pages)
-                    tvPublisher.text = bookDetail.publisher
-                    tvYear.text = bookDetail.year
-                    tvGenre.text = bookDetail.genre
-                    tvLongDesc.text = bookDetail.summary
+                    tvTitle.text = bookDetail?.title
+                    Glide.with(requireActivity()).load(bookDetail?.image).into(ivImage)
+                    tvAuthors.text = bookDetail?.authors
+                    tvPages.text = context?.getString(R.string.pages, bookDetail?.pages ?: 0)
+                    tvPublisher.text = bookDetail?.publisher
+                    tvYear.text = bookDetail?.year
+                    tvGenre.text = bookDetail?.genre
+                    tvLongDesc.text = bookDetail?.summary
 
                     isAtLeastAndroid(Q) {
                         tvLongDesc.justificationMode = LineBreaker.JUSTIFICATION_MODE_INTER_WORD
@@ -102,6 +129,16 @@ class BookDetailFragment : Fragment(), NetworkAware {
                 binding.pbLoading.visibility = View.GONE
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        networkMonitor.register()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        networkMonitor.unregister()
     }
 
     override fun onNetworkAvailable() {

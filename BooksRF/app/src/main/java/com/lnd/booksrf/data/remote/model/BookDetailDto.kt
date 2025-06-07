@@ -21,5 +21,8 @@ data class BookDetailDto (
     @SerializedName(BookJsonKeys.SUMMARY)
     var summary: String? = null,
     @SerializedName(BookJsonKeys.VIDEO)
-    var video: String? = null
+    var video: String? = null,
+    @SerializedName(BookJsonKeys.LOCATION)
+    var location: LocationDto? = null
 )
+

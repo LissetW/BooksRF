@@ -12,4 +12,8 @@ object BookJsonKeys {
     const val VIDEO = "video"
     const val ID = "id"
     const val THUMBNAIL = "thumbnail"
+    const val LOCATION = "location"
+    const val CITY_NAME = "name"
+    const val LATITUDE = "latitude"
+    const val LONGITUDE = "longitude"
 }

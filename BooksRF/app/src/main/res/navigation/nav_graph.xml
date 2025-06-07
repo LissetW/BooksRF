@@ -3,8 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/booksListFragment">
+    app:startDestination="@id/loginFragment">
 
+    <fragment
+        android:id="@+id/SignUpFragment"
+        android:name="com.lnd.booksrf.ui.fragments.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_SignUpFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.lnd.booksrf.ui.fragments.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_booksListFragment"
+            app:destination="@id/booksListFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_SignUpFragment"
+            app:destination="@id/SignUpFragment" />
+    </fragment>
     <fragment
         android:id="@+id/booksListFragment"
         android:name="com.lnd.booksrf.ui.fragments.BooksListFragment"
@@ -13,6 +35,9 @@
         <action
             android:id="@+id/action_booksListFragment_to_bookDetailFragment"
             app:destination="@id/bookDetailFragment" />
+        <action
+            android:id="@+id/action_booksListFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/bookDetailFragment"
@@ -28,6 +53,9 @@
         <argument
             android:name="id"
             app:argType="string" />
+        <action
+            android:id="@+id/action_bookDetailFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
     </fragment>
     <fragment
         android:id="@+id/videoFragment"
@@ -40,5 +68,14 @@
         <argument
             android:name="videoUrl"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.lnd.booksrf.ui.fragments.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_bookDetailFragment"
+            app:destination="@id/bookDetailFragment" />
     </fragment>
 </navigation>
